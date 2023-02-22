@@ -8,7 +8,10 @@ module.exports = {
         darkBlue: "#5d5b8d",
         dimBlue: "#a7bcff",
         dimWhite: "rgba(255, 255, 255, 0.7)",
-        bgButton: "#7b96ec",
+        offWhite: "#ddddf7",
+        buttonBg: "#7b96ec",
+        navbarBg: "#2f2d52",
+        sidebarBg: "#3e3c61",
       },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],

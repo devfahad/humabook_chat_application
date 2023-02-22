@@ -17,7 +17,7 @@ const Register = () => {
             <img src={addAvatar} className="w-8" alt="Add avatar" />
             <span className="text-[#9ca3af]">Add an avatar</span>
           </label>
-          <button className="bg-bgButton text-white p-[10px] font-bold hover:bg-darkBlue mt-[10px]">Sign up</button>
+          <button className="bg-buttonBg text-white p-[10px] font-bold hover:bg-darkBlue mt-[10px]">Sign up</button>
         </form>
         <p className="text-darkBlue text-[12px] mt-[10px]">You do have an account? Login</p>
       </div>
