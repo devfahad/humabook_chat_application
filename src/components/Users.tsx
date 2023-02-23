@@ -13,7 +13,7 @@ const Users = () => {
           className="w-[45px] h-[45px] rounded-full object-cover"
         />
         <div className="userChatinfo">
-          <span className="text-[15px] font-bold">Jessica</span>
+          <span className="text-[15px] font-medium">Jessica</span>
           <p className="text-[13px] text-lightgray">Hello</p>
         </div>
       </div>
@@ -25,7 +25,7 @@ const Users = () => {
           className="w-[45px] h-[45px] rounded-full object-cover"
         />
         <div className="userChatinfo">
-          <span className="text-[15px] font-bold">Jessica</span>
+          <span className="text-[15px] font-medium">Jessica</span>
           <p className="text-[13px] text-lightgray">Hello</p>
         </div>
       </div>
@@ -36,7 +36,7 @@ const Users = () => {
           className="w-[45px] h-[45px] rounded-full object-cover"
         />
         <div className="userChatinfo">
-          <span className="text-[15px] font-bold">Jessica</span>
+          <span className="text-[15px] font-medium">Jessica</span>
           <p className="text-[13px] text-lightgray">Hello</p>
         </div>
       </div>

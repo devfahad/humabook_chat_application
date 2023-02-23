@@ -2,6 +2,9 @@
 module.exports = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
+    fontFamily: {
+      poppins: ["Poppins", "sans-serif"],
+    },
     extend: {
       colors: {
         dimGray: "#374151",
@@ -13,9 +16,9 @@ module.exports = {
         navbarBg: "#2f2d52",
         sidebarBg: "#3e3c61",
       },
-      fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
-      },
+      maxWidth: {
+        'mc': 'max-content',
+      }
     },
   },
   plugins: [],

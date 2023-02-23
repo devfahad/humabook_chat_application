@@ -11,7 +11,7 @@ const Search = () => {
       <div className="p-[10px] flex items-center gap-[10px] text-white cursor-pointer hover:bg-navbarBg">
         <img src={curUserImg} alt="Jessica" className="w-[45px] h-[45px] rounded-full object-cover" />
         <div className="userChatinfo">
-          <span className="text-[15px] font-bold">Jessica</span>
+          <span className="text-[15px] font-medium">Jessica</span>
         </div>
       </div>
     </div>
