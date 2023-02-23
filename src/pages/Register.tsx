@@ -1,14 +1,72 @@
-import React from "react";
+import React, {useState} from "react";
 import logo from "../assets/logo.png";
 import addAvatar from "../assets/addAvatar.png";
+import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
+import {auth, storage} from "../firebase";
+import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 
 const Register = () => {
+  const [err, setErr] = useState(false);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const displayName = e.target[0].value;
+    const email = e.target[1].value;
+    const password = e.target[2].value;
+    const file = e.target[3].files[0];
+
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      setErr(false);
+      console.log(res.user)
+
+      const storageRef = ref(storage, displayName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      // Register three observers:
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          setErr(true);
+        },
+        () => {
+          // Handle successful uploads on complete
+          setErr(false);
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateProfile(res.user, {
+              displayName,
+              photoURL: downloadURL
+            });
+          });
+        }
+      );
+    } catch (err) {
+      setErr(true);
+    }
+  };
+
   return (
     <div className="bg-dimGray h-screen flex justify-center items-center">
       <div className="bg-white px-[20px] py-[60px] rounded-[10px] flex items-center flex-col gap-2">
         <img src={logo} alt="logo" />
         <span className="text-darkBlue text-[14px]">Register</span>
-        <form className="flex flex-col gap-[15px] text-[14px]">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-[15px] text-[14px]"
+        >
           <input
             type="text"
             placeholder="Display name"
@@ -35,6 +93,12 @@ const Register = () => {
           <button className="bg-buttonBg text-white p-[10px] font-bold hover:bg-darkBlue mt-[10px]">
             Sign up
           </button>
+
+          {err && (
+            <span className="text-red-600 text-center">
+              Something went wrong!
+            </span>
+          )}
         </form>
         <p className="text-darkBlue text-[12px] mt-[10px]">
           You do have an account? Login
