@@ -5,9 +5,11 @@ import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {auth, storage, db} from "../firebase";
 import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {doc, setDoc} from "firebase/firestore";
+import {useNavigate} from "react-router-dom";
 
 const Register = () => {
   const [err, setErr] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -62,6 +64,7 @@ const Register = () => {
 
             // Add a new "userChat" collection as well
             await setDoc(doc(db, "userChat", res.user.uid), {});
+            navigate("/");
           });
         }
       );
