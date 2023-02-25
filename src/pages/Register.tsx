@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import logo from "../assets/logo.png";
 import addAvatar from "../assets/addAvatar.png";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
-import {auth, storage} from "../firebase";
+import {auth, storage, db} from "../firebase";
 import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
+import {doc, setDoc} from "firebase/firestore";
 
 const Register = () => {
   const [err, setErr] = useState(false);
@@ -16,14 +17,14 @@ const Register = () => {
     const file = e.target[3].files[0];
 
     try {
+      // create a user using email & pass in firebase
       const res = await createUserWithEmailAndPassword(auth, email, password);
       setErr(false);
-      console.log(res.user)
+      console.log(res.user);
 
+      // upload image file to firebase
       const storageRef = ref(storage, displayName);
       const uploadTask = uploadBytesResumable(storageRef, file);
-
-      // Register three observers:
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -48,8 +49,19 @@ const Register = () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             await updateProfile(res.user, {
               displayName,
-              photoURL: downloadURL
+              photoURL: downloadURL,
             });
+
+            // Add a new user to "users" collection after registration
+            await setDoc(doc(db, "users", res.user.uid), {
+              uid: res.user.uid,
+              displayName,
+              email,
+              photoURL: downloadURL,
+            });
+
+            // Add a new "userChat" collection as well
+            await setDoc(doc(db, "userChat", res.user.uid), {});
           });
         }
       );
