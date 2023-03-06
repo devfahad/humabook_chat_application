@@ -5,7 +5,7 @@ import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {auth, storage, db} from "../firebase";
 import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {doc, setDoc} from "firebase/firestore";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Register = () => {
   const [err, setErr] = useState(false);
@@ -22,7 +22,6 @@ const Register = () => {
       // create a user using email & pass in firebase
       const res = await createUserWithEmailAndPassword(auth, email, password);
       setErr(false);
-      console.log(res.user);
 
       // upload image file to firebase
       const storageRef = ref(storage, displayName);
@@ -116,7 +115,7 @@ const Register = () => {
           )}
         </form>
         <p className="text-darkBlue text-[12px] mt-[10px]">
-          You do have an account? Login
+          You do have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
