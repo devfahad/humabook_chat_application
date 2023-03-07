@@ -2,12 +2,17 @@ import React, {useState} from "react";
 import {collection, getDocs, query, where} from "firebase/firestore";
 import {db} from "../firebase";
 
+type User = {
+  displayName: string;
+  photoURL: string;
+}
+
 const Search = () => {
   const [username, setUserName] = useState<string>("");
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [err, setErr] = useState<boolean>(false);
 
-  const handleSearch = async () => {
+  const handleSearch = async (): Promise<void>  => {
     // Create a query.
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("displayName", "==", username));
@@ -23,7 +28,7 @@ const Search = () => {
     }
   };
 
-  const handleKey = (e: any) => {
+  const handleKey = (e: any): void => {
     e.code === "Enter" && handleSearch();
   };
 
@@ -34,7 +39,7 @@ const Search = () => {
           type="text"
           placeholder="Find a user"
           className="bg-transparent text-white outline-none placeholder:text-[12px] text-[12px]"
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
           onKeyDown={handleKey}
         />
       </div>

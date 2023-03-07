@@ -1,15 +1,14 @@
 import React, {useState} from "react";
 import logo from "../assets/logo.png";
-import addAvatar from "../assets/addAvatar.png";
 import {Link, useNavigate} from "react-router-dom";
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import {auth} from "../firebase";
 
 const Login = () => {
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
     const email = e.target[0].value;
     const password = e.target[1].value;

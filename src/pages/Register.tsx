@@ -8,10 +8,10 @@ import {doc, setDoc} from "firebase/firestore";
 import {Link, useNavigate} from "react-router-dom";
 
 const Register = () => {
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
     const displayName = e.target[0].value;
     const email = e.target[1].value;
