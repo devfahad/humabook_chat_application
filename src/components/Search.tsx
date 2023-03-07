@@ -1,19 +1,59 @@
-import React from "react";
-
-const curUserImg = "https://images.unsplash.com/photo-1588516903720-8ceb67f9ef84?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fHdvbWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60";
+import React, {useState} from "react";
+import {collection, getDocs, query, where} from "firebase/firestore";
+import {db} from "../firebase";
 
 const Search = () => {
+  const [username, setUserName] = useState<string>("");
+  const [user, setUser] = useState<any>(null)
+  const [err, setErr] = useState<boolean>(false);
+
+  const handleSearch = async () => {
+    // Create a query.
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("displayName", "==", username));
+
+    // Execute query to get results
+    try {
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc: any) => {
+        setUser(doc.data());
+      });
+    } catch (err) {
+      setErr(true);
+    }
+  };
+
+  const handleKey = (e: any) => {
+    e.code === "Enter" && handleSearch();
+  };
+
   return (
     <div className="border-b-[1px] border-solid border-gray">
       <div className="p-[10px]">
-        <input type="text" placeholder="Find a user" className="bg-transparent text-white outline-none placeholder:text-[12px] text-[12px]" />
+        <input
+          type="text"
+          placeholder="Find a user"
+          className="bg-transparent text-white outline-none placeholder:text-[12px] text-[12px]"
+          onChange={(e) => setUserName(e.target.value)}
+          onKeyDown={handleKey}
+        />
       </div>
-      <div className="p-[10px] flex items-center gap-[10px] text-white cursor-pointer hover:bg-navbarBg">
-        <img src={curUserImg} alt="Jessica" className="w-[45px] h-[45px] rounded-full object-cover" />
-        <div className="userChatinfo">
-          <span className="text-[15px] font-medium">Jessica</span>
+      {err && (
+        <span className="pl-2 text-[15px] text-red-600 text-center">Something went wrong!</span>
+      )}
+
+      {user && (
+        <div className="p-[10px] flex items-center gap-[10px] text-white cursor-pointer hover:bg-navbarBg">
+          <img
+            src={user.photoURL}
+            alt={user.displayName}
+            className="w-[45px] h-[45px] rounded-full object-cover"
+          />
+          <div className="userChatinfo">
+            <span className="text-[15px] font-medium">{user.displayName}</span>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
