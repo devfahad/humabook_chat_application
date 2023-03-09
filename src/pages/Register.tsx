@@ -9,9 +9,11 @@ import {Link, useNavigate} from "react-router-dom";
 
 const Register = () => {
   const [err, setErr] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: any): Promise<void> => {
+    setLoading(true);
     e.preventDefault();
     const displayName = e.target[0].value;
     const email = e.target[1].value;
@@ -19,35 +21,17 @@ const Register = () => {
     const file = e.target[3].files[0];
 
     try {
-      // create a user using email & pass in firebase
+      // Create user
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      setErr(false);
 
-      // upload image file to firebase
-      const storageRef = ref(storage, displayName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
-        },
-        (error) => {
-          setErr(true);
-        },
-        () => {
-          // Handle successful uploads on complete
-          setErr(false);
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+      // Create a unique image name
+      const date = new Date().getTime();
+      const storageRef = ref(storage, `${displayName + date}`);
+
+      await uploadBytesResumable(storageRef, file).then(() => {
+        getDownloadURL(storageRef).then(async (downloadURL) => {
+          try {
+            // Update profile
             await updateProfile(res.user, {
               displayName,
               photoURL: downloadURL,
@@ -61,20 +45,25 @@ const Register = () => {
               photoURL: downloadURL,
             });
 
-            // Add a new "userChat" collection as well
+            //create empty user chats on firestore
             await setDoc(doc(db, "userChat", res.user.uid), {});
             navigate("/");
-          });
-        }
-      );
+          } catch (err) {
+            // console.log(err);
+            setErr(true);
+            setLoading(false);
+          }
+        });
+      });
     } catch (err) {
       setErr(true);
+      setLoading(false);
     }
   };
 
   return (
     <div className="bg-dimGray h-screen flex justify-center items-center">
-      <div className="bg-white px-[20px] py-[60px] rounded-[10px] flex items-center flex-col gap-2">
+      <div className="bg-white px-[20px] py-[60px] rounded-[10px] flex items-center flex-col gap-2 max-w-[320px]">
         <img src={logo} alt="logo" />
         <span className="text-darkBlue text-[14px]">Register</span>
         <form
@@ -104,9 +93,18 @@ const Register = () => {
             <img src={addAvatar} className="w-8" alt="Add avatar" />
             <span className="text-[#9ca3af]">Add an avatar</span>
           </label>
-          <button className="bg-buttonBg text-white p-[10px] font-bold hover:bg-darkBlue mt-[10px]">
+          <button
+            className="bg-buttonBg text-white p-[10px] font-bold hover:bg-darkBlue mt-[10px]"
+            disabled={loading}
+          >
             Sign up
           </button>
+
+          {loading && (
+            <span className="text-gray-600 text-center">
+              Uploading and compressing the image. Please wait...
+            </span>
+          )}
 
           {err && (
             <span className="text-red-600 text-center">

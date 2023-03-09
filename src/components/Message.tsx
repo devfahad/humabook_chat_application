@@ -1,18 +1,59 @@
-import React from "react";
+import { Timestamp } from "firebase/firestore";
+import React, {useContext, useEffect, useRef} from "react";
+import {AuthContext} from "../context/AuthContext";
+import {ChatContext} from "../context/ChatContext";
 
-const imgURL =
-  "https://images.unsplash.com/photo-1588516903720-8ceb67f9ef84?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fHdvbWVufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60";
+const Message = ({message}: any) => {
+  const {currentUser}: any = useContext(AuthContext);
+  const {data}: any = useContext(ChatContext);
 
-const Message = () => {
+  // scroll down when a message is send
+  const divRef: any = useRef<HTMLDivElement>();
+
+  useEffect(() => {
+    divRef.current?.scrollIntoView({behavior: "smooth"});
+  }, [message]);
+
   return (
-    <div className="flex gap-[20px]">
+    <div
+      ref={divRef}
+      className={`flex ${
+        message.senderId === currentUser.uid && "flex-row-reverse"
+      } gap-[20px]`}
+    >
       <div className="flex flex-col">
-        <img src={imgURL} alt="user" className="w-[40px] h-[40px] rounded-full object-cover" />
-        <span className="text-[12px] font-light text-gray-500">Just now</span>
+        <img
+          src={
+            message.senderId === currentUser.uid
+              ? currentUser.photoURL
+              : data.user.photoURL
+          }
+          alt="user"
+          className="w-[40px] h-[40px] rounded-full object-cover"
+        />
+        <span className="text-[12px] font-light text-gray-500">
+          {message.date.toDate().toLocaleTimeString('en-US')}
+        </span>
       </div>
-      <div className="max-w-[80%] flex flex-col gap-[10px]">
-        <p className="bg-white py-[10px] px-[20px] rounded-[10px] rounded-tl-none max-w-mc text-[15px]">Hello</p>
-        {/* <img src={imgURL} alt="user" /> */}
+      <div
+        className={`max-w-[80%] flex flex-col gap-[10px] ${
+          message.senderId === currentUser.uid && "items-end"
+        }`}
+      >
+        {message.text && (
+          <p
+            className={`${
+              message.senderId === currentUser.uid
+                ? "bg-darkBlue text-white rounded-tr-none"
+                : "bg-white rounded-tl-none"
+            } py-[10px] px-[20px] max-w-mc text-[15px] rounded-[10px]`}
+          >
+            {message.text}
+          </p>
+        )}
+        {message.img && (
+          <img className="py-[10px] max-w-xs" src={message.img} alt="" />
+        )}
       </div>
     </div>
   );
