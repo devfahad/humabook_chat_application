@@ -92,7 +92,7 @@ const Search = () => {
         <input
           type="text"
           placeholder="Find a user"
-          className="bg-transparent text-white outline-none placeholder:text-[12px] text-[12px]"
+          className="bg-transparent text-white placeholder:text-dimWhite outline-none placeholder:text-[13px] text-[13px]"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setUserName(e.target.value)
           }

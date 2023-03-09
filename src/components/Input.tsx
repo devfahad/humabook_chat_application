@@ -73,17 +73,17 @@ const Input = () => {
     setImg(null);
   };
   return (
-    <div className="h-[50px] p-[10px] bg-white flex items-center justify-between gap-[10px]">
+    <div className="h-[50px] p-[10px] bg-white flex items-center justify-between gap-[10px] px-4">
       <input
         type="text"
         placeholder="Type here..."
-        className="w-[75%] outline-none text-[14px] text-navbarBg placeholder:text-[14px]"
+        className="w-[80%] outline-none text-[14px] text-navbarBg placeholder:text-[14px]"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setText(e.target.value)
         }
         value={text}
       />
-      <div className="w-[25%] flex items-center justify-around gap-[10px]">
+      <div className="w-[20%] flex items-center justify-end gap-[10px]">
         <input
           type="file"
           id="fileAttach"

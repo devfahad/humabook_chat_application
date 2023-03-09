@@ -19,7 +19,7 @@ const Message = ({message}: any) => {
       ref={divRef}
       className={`flex ${
         message.senderId === currentUser.uid && "flex-row-reverse"
-      } gap-[20px]`}
+      } gap-[20px] py-1`}
     >
       <div className="flex flex-col">
         <img
@@ -31,7 +31,7 @@ const Message = ({message}: any) => {
           alt="user"
           className="w-[40px] h-[40px] rounded-full object-cover"
         />
-        <span className="text-[12px] font-light text-gray-500">
+        <span className="text-[11px] pt-1 font-normal text-gray-500">
           {message.date.toDate().toLocaleTimeString('en-US')}
         </span>
       </div>
@@ -46,7 +46,7 @@ const Message = ({message}: any) => {
               message.senderId === currentUser.uid
                 ? "bg-darkBlue text-white rounded-tr-none"
                 : "bg-white rounded-tl-none"
-            } py-[10px] px-[20px] max-w-mc text-[15px] rounded-[10px]`}
+            } py-[10px] mt-2 px-[20px] max-w-mc text-[15px] rounded-[10px]`}
           >
             {message.text}
           </p>

@@ -9,11 +9,11 @@ const Navbar = () => {
 
   return (
     <div className="flex items-center justify-between bg-offWhite text-dimGray p-[10px] h-[50px]">
-      <img src={logo} alt="logo" className="max-h-[24px]" />
+      <img src={logo} alt="logo" className="max-h-[27px]" />
       <div className="flex items-center gap-2">
         <img src={currentUser.photoURL} alt={currentUser.displayName} className="h-[30px] w-[30px] rounded-full object-cover border-[1px] border-solid border-darkBlue" />
-        <span className="text-[12px]">{currentUser.displayName}</span>
-        <button onClick={()=> signOut(auth)} className="bg-darkBlue text-offWhite text-[10px] py-1 px-2 rounded-sm hover:bg-navbarBg">Logout</button>
+        <span className="text-[13px]">{currentUser.displayName}</span>
+        <button onClick={()=> signOut(auth)} className="bg-darkBlue text-offWhite text-[12px] py-1 px-2 rounded-sm hover:bg-navbarBg">Logout</button>
       </div>
     </div>
   );

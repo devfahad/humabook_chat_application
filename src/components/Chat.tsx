@@ -11,7 +11,7 @@ const Chat = () => {
   const {data}: any = useContext(ChatContext);
 
   return (
-    <div className="w-[67%] ">
+    <div className="w-[70%] ">
       <div className="h-[50px] bg-darkBlue flex items-center justify-between p-[10px]">
         <span className="text-offWhite text-[14px]">
           {data.user?.displayName}
